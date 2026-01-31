@@ -1,0 +1,12 @@
+[
+    {"name": "Al Olaya", "region": "Riyadh", "lat": 24.6934, "lon": 46.6853, "population": 45000, "mobility_coefficient": 0.8, "initial_infected": 50},
+    {"name": "Al Malaz", "region": "Riyadh", "lat": 24.6647, "lon": 46.7378, "population": 38000, "mobility_coefficient": 0.6, "initial_infected": 20},
+    {"name": "Diplomatic Quarter", "region": "Riyadh", "lat": 24.6853, "lon": 46.6212, "population": 12000, "mobility_coefficient": 0.4, "initial_infected": 5},
+    {"name": "Al Balad", "region": "Jeddah", "lat": 21.4858, "lon": 39.1925, "population": 55000, "mobility_coefficient": 0.9, "initial_infected": 100},
+    {"name": "Al Hamra", "region": "Jeddah", "lat": 21.5169, "lon": 39.1555, "population": 22000, "mobility_coefficient": 0.7, "initial_infected": 15},
+    {"name": "Obhur", "region": "Jeddah", "lat": 21.7516, "lon": 39.1235, "population": 15000, "mobility_coefficient": 0.5, "initial_infected": 10},
+    {"name": "Al Khobar North", "region": "Eastern Province", "lat": 26.2942, "lon": 50.2079, "population": 30000, "mobility_coefficient": 0.7, "initial_infected": 25},
+    {"name": "Dammam City Center", "region": "Eastern Province", "lat": 26.4207, "lon": 50.0888, "population": 60000, "mobility_coefficient": 0.75, "initial_infected": 60},
+    {"name": "Dhahran (KFUPM)", "region": "Eastern Province", "lat": 26.3046, "lon": 50.1456, "population": 25000, "mobility_coefficient": 0.3, "initial_infected": 10},
+    {"name": "Al Faisaliyah", "region": "Dammam", "lat": 26.3985, "lon": 50.0630, "population": 28000, "mobility_coefficient": 0.6, "initial_infected": 30}
+]

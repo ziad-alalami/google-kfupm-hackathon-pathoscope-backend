@@ -1,0 +1,243 @@
+{
+	"info": {
+		"_postman_id": "b3e34c2a-1234-5678-9abc-def012345678",
+		"name": "Binary Bros Hackathon",
+		"description": "API Collection for Intelligent Planet Hackathon Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Node Operations",
+			"item": [
+				{
+					"name": "Get All Nodes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/node/all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"node",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Node",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Test District\",\n  \"region\": \"Riyadh\",\n  \"lat\": 24.75,\n  \"lon\": 46.70,\n  \"population\": 5000,\n  \"mobility_coefficient\": 0.5,\n  \"initial_infected\": 10\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/node/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"node",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Specific Node",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/node/{node_id_here}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"node",
+								"{node_id_here}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Node",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/node/{node_id_here}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"node",
+								"{node_id_here}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Simulation",
+			"item": [
+				{
+					"name": "Run Simulation (Standard)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"simulation_horizon_days\": 30,\n  \"disease_parameters\": {\n    \"base_r0\": 3.28,\n    \"incubation_period_days\": 5.0,\n    \"infectious_period_days\": 7.0,\n    \"infection_fatality_rate\": 0.02\n  },\n  \"active_policies\": [\n    {\n      \"policy_type\": \"Mask Mandate\",\n      \"impact_on_r0\": 0.85,\n      \"impact_on_mobility\": 1.0\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/simulate/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"simulate",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Run Simulation (Lockdown)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"simulation_horizon_days\": 45,\n  \"disease_parameters\": {\n    \"base_r0\": 3.5,\n    \"incubation_period_days\": 4.0,\n    \"infectious_period_days\": 6.0,\n    \"infection_fatality_rate\": 0.03\n  },\n  \"active_policies\": [\n    {\n      \"policy_type\": \"Lockdown\",\n      \"impact_on_r0\": 0.5,\n      \"impact_on_mobility\": 0.1\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/simulate/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"simulate",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Agent",
+			"item": [
+				{
+					"name": "Chat (General Question)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"chat_history\": [\n    {\"role\": \"user\", \"content\": \"What is the current population of Al Olaya?\"}\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/agent/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"agent",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat (Request Simulation)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"chat_history\": [\n    {\"role\": \"user\", \"content\": \"Forecast what happens if we impose a strict lockdown starting tomorrow for 30 days.\"}\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/agent/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"agent",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000",
+			"type": "string"
+		}
+	]
+}
