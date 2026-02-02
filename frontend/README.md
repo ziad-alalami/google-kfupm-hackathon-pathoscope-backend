@@ -20,7 +20,9 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-The app requires a Mapbox API token.
+
+## THE IMPORTANT STEP TO MAKE THE MAP RENDER 
+The app requires a Mapbox API token. Sign up [here](https://www.mapbox.com/) and use the public token in your .env file in the ``/frontend`` directory. 
 
 ## Learn More
 
