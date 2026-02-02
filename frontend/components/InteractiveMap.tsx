@@ -7,13 +7,20 @@ import type { FeatureCollection, Feature, Point } from 'geojson';
 import { getAllNodes } from "@/lib/api";
 
 type Node = {
-  id: string;
+  node_id: string;
+  name: string;
+  region: string;
+  mobility_coefficient: number;
+  population: number;
   lat: number;
   lon: number;
-  S: number;
-  E: number;
-  I: number;
-  R: number;
+  current_state: {
+    S: number;
+    E: number;
+    I: number;
+    R: number;
+    D: number;
+  }
 };
 
 function nodesToGeoJSON(nodes: Node[]): FeatureCollection<Point> {
@@ -26,11 +33,16 @@ function nodesToGeoJSON(nodes: Node[]): FeatureCollection<Point> {
         coordinates: [n.lon, n.lat],
       },
       properties: {
-        id: n.id,
-        S: n.S,
-        E: n.E,
-        I: n.I,
-        R: n.R,
+        node_id: n.node_id,
+        name: n.name,
+        region: n.region,
+        mobility_coefficient: n.mobility_coefficient,
+        population: n.population,
+        S: n.current_state.S,
+        E: n.current_state.E,
+        I: n.current_state.I,
+        R: n.current_state.R,
+        D: n.current_state.D,
       },
     })),
   };
@@ -55,6 +67,7 @@ export default function InteractiveMap() {
       const nodes = await getAllNodes();
       console.log("RAW NODES:", nodes);
       const geojson = nodesToGeoJSON(nodes);
+      console.log("GEOJSON:", geojson);
 
       map.addSource("districts", {
         type: "geojson",
