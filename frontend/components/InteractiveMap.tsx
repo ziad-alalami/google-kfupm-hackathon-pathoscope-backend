@@ -100,11 +100,12 @@ export default function InteractiveMap() {
           new mapboxgl.Popup()
             .setLngLat(e.lngLat)
             .setHTML(`
-              <strong>District ${props.id}</strong><br/>
+              <strong>District: ${props.name}</strong><br/>
               S: ${props.S}<br/>
               E: ${props.E}<br/>
               I: ${props.I}<br/>
-              R: ${props.R}
+              R: ${props.R}<br/>
+              D: ${props.D}
             `)
             .addTo(map);
         }
