@@ -26,7 +26,7 @@ const NodeDetailsPanel: React.FC<Props> = ({ node, onDelete }) => {
   return (
     <aside className="w-80 shrink-0 border-l border-slate-800 bg-slate-900/80 backdrop-blur-md text-slate-100 flex flex-col shadow-lg">
       <div className="p-4 border-b border-slate-800">
-        <h2 className="text-lg font-semibold tracking-tight">Node Details</h2>
+        <h2 className="text-lg font-semibold">Node Details</h2>
         <p className="text-xs text-slate-400 mt-1">
           Hover or click a node on the map to inspect its SEIRD state.
         </p>

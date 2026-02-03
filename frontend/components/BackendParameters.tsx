@@ -10,6 +10,42 @@ type PolicyOption =
   | "Travel Ban"
   | "Remote Work";
 
+const SectionHeader = ({ title }: { title: string }) => (
+  <div className="text-lg font-semibold">
+    {title}
+  </div>
+);
+
+const ToggleRow = ({
+  label,
+  enabled,
+  onToggle,
+}: {
+  label: string;
+  enabled: boolean;
+  onToggle: () => void;
+}) => (
+  <div
+    onClick={onToggle}
+    className="flex items-center justify-between px-3 py-2 m-1 rounded-md bg-slate-800 hover:bg-slate-700 cursor-pointer transition"
+  >
+    <span className="text-xs font-semibold text-slate-200">{label}</span>
+    <div
+      className={`w-10 h-5 flex items-center rounded-full p-1 transition ${
+        enabled ? "bg-sky-500" : "bg-slate-600"
+      }`}
+    >
+      <div
+        className={`bg-white w-4 h-4 rounded-full shadow-md transform transition ${
+          enabled ? "translate-x-5" : ""
+        }`}
+      />
+    </div>
+  </div>
+);
+
+
+
 const BackendParameters: React.FC<{ onSimulationComplete?: (results: any[]) => void }> = ({
   onSimulationComplete,
 }) => {
@@ -21,6 +57,11 @@ const BackendParameters: React.FC<{ onSimulationComplete?: (results: any[]) => v
   const [selectedPolicies, setSelectedPolicies] = useState<PolicyOption[]>([]);
   const [loading, setLoading] = useState(false);
 
+  function togglePolicy(p: PolicyOption) {
+    setSelectedPolicies((prev) =>
+        prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p]
+    );
+  }
   async function handleRun() {
     setLoading(true);
     try {
@@ -52,9 +93,9 @@ const BackendParameters: React.FC<{ onSimulationComplete?: (results: any[]) => v
   return (
     <aside className="w-80 shrink-0 border-l border-slate-800 bg-slate-900/80 backdrop-blur-md text-slate-100 flex flex-col shadow-lg">
       <div className="p-4 border-b border-slate-800">
-        <h2 className="text-lg font-semibold tracking-tight">Simulation Config</h2>
+        <SectionHeader title="Simulation Parameters" />
         <p className="text-xs text-slate-400 mt-1">
-          These map directly to the backend SEIRD simulation DTO.
+          Adjust the simulation parameters and time period.
         </p>
       </div>
 
@@ -76,7 +117,7 @@ const BackendParameters: React.FC<{ onSimulationComplete?: (results: any[]) => v
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-[11px] font-semibold text-slate-300">
-              Base R0
+              Base Reproduction R0
             </label>
             <input
               type="number"
@@ -124,38 +165,33 @@ const BackendParameters: React.FC<{ onSimulationComplete?: (results: any[]) => v
           </div>
         </div>
 
-        <div>
-          <label className="block text-[11px] font-semibold text-slate-300">
-            Policies (multi-select)
-          </label>
-          <div className="mt-1 grid grid-cols-1 gap-1">
-            {["Mask Mandate", "Lockdown", "School Closure", "Travel Ban", "Remote Work"].map(
-              (p) => {
-                const checked = selectedPolicies.includes(p as PolicyOption);
-                return (
-                  <label
-                    key={p}
-                    className="flex items-center gap-2 text-[11px] text-slate-200 cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={(e) => {
-                        setSelectedPolicies((prev) => {
-                          if (e.target.checked) {
-                            return [...prev, p as PolicyOption];
-                          }
-                          return prev.filter((x) => x !== p);
-                        });
-                      }}
-                      className="h-3 w-3 rounded border-slate-600 bg-slate-900"
-                    />
-                    <span>{p}</span>
-                  </label>
-                );
-              }
-            )}
-          </div>
+        <SectionHeader title="Intervention Policies" />
+        <div className="-mt-3">
+          <ToggleRow
+            label="City Lockdown"
+            enabled={selectedPolicies.includes("Lockdown")}
+            onToggle={() => togglePolicy("Lockdown")}
+          />
+          <ToggleRow
+            label="Mask Mandate"
+            enabled={selectedPolicies.includes("Mask Mandate")}
+            onToggle={() => togglePolicy("Mask Mandate")}
+          />
+          <ToggleRow
+            label="Travel Reduction"
+            enabled={selectedPolicies.includes("Travel Ban")}
+            onToggle={() => togglePolicy("Travel Ban")}
+          />
+          <ToggleRow
+            label="School Closure"
+            enabled={selectedPolicies.includes("School Closure")}
+            onToggle={() => togglePolicy("School Closure")}
+          />
+          <ToggleRow
+            label="Remote Work"
+            enabled={selectedPolicies.includes("Remote Work")}
+            onToggle={() => togglePolicy("Remote Work")}
+          />
         </div>
 
         <button

@@ -172,7 +172,7 @@ export default function SimulationDashboard() {
               const normalized = Array.isArray(results) ? results : [];
               setFrames(normalized);
               setCurrentDayIndex(0);
-              setPlaying(false);
+              setPlaying(true);
             }}
           />
         </div>
