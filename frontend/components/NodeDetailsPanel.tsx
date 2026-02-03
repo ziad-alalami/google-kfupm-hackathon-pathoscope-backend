@@ -20,7 +20,9 @@ export type UINode = {
 };
 
 interface Props {
+  nodes: UINode[];
   node: UINode | null;
+  onNodeClick: (node: UINode | null) => void;
   onDelete?: (node: UINode) => void;
 }
 
@@ -55,18 +57,40 @@ const LabelWithInfo = ({ label, description }: { label: string; description: str
   </Tooltip.Provider>
 );
 
-const NodeDetailsPanel: React.FC<Props> = ({ node, onDelete }) => {
+const NodeDetailsPanel: React.FC<Props> = ({ nodes, node, onNodeClick, onDelete }) => {
   return (
     <aside className="w-80 shrink-0 border-l border-slate-800 bg-slate-900/80 backdrop-blur-md text-slate-100 flex flex-col shadow-lg">
       <div className="p-4 border-b border-slate-800">
         <h2 className="text-lg font-semibold">Node Details</h2>
         <p className="text-xs text-slate-400 mt-1">
-          Hover or click a node on the map to inspect its SEIRD state.
+          Click a node on the map to inspect its SEIRD state.
         </p>
       </div>
 
+      
+
+      <div className="p-3 border-b border-slate-800">
+        <p className="text-[12px] font-semibold text-slate-400 mb-2">Quick Select Nodes</p>
+
+        <div className="space-y-1 max-h-25 overflow-y-auto no-scrollbar">
+          {nodes.slice(0, 8).map((n) => (
+            <button
+              key={n.node_id}
+              onClick={() => onNodeClick(n)}
+              className={`w-full text-left px-2 py-1.5 rounded-md text-xs transition
+                ${node?.node_id === n.node_id
+                  ? "bg-sky-600 text-white"
+                  : "bg-slate-800 hover:bg-slate-700 text-slate-200"}`}
+            >
+              {n.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+
       {node ? (
-        <div className="p-4 space-y-4 overflow-y-auto">
+        <div className="p-4 space-y-4 overflow-y-auto no-scrollbar">
           <div>
             <h3 className="text-base font-semibold">{node.name}</h3>
             <p className="text-xs text-slate-400 mt-0.5">

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import InteractiveMap from '../components/InteractiveMap';
-import { deleteNode, createNode } from "@/lib/api";
+import { getAllNodes, deleteNode, createNode } from "@/lib/api";
 import ChatWidget from '../components/ChatWidget';
 import BackendParameters from '../components/BackendParameters';  
 import NodeDetailsPanel, { UINode } from "../components/NodeDetailsPanel";
@@ -30,6 +30,7 @@ function computeTotals(frame: SimulationFrame | undefined) {
 
 export default function SimulationDashboard() {
   const [selectedNode, setSelectedNode] = useState<UINode | null>(null);
+  const [allNodes, setAllNodes] = useState<any[]>([]);
   const [frames, setFrames] = useState<SimulationFrame[]>([]);
   const [currentDayIndex, setCurrentDayIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -59,6 +60,14 @@ export default function SimulationDashboard() {
       : undefined;
   const totals = computeTotals(currentFrame);
 
+  // Get all nodes on mount to show as list 
+  useEffect(() => {
+    getAllNodes().then((nodes) => {
+      console.log("Fetched nodes:", nodes);
+      setAllNodes(nodes);
+    });
+  }, []);
+
   // Keep selected node's SEIRD state in sync with the current frame
   useEffect(() => {
     if (!selectedNode || !currentFrame) return;
@@ -69,7 +78,7 @@ export default function SimulationDashboard() {
         ? { ...prev, current_state: state }
         : prev
     );
-  }, [currentFrame, selectedNode?.node_id, selectedNode?.name]);
+  }, [currentFrame, selectedNode?.node_id]);
 
   // Auto-play simulation when "playing" is true
   useEffect(() => {
@@ -126,7 +135,12 @@ export default function SimulationDashboard() {
       <div className="flex flex-1 flex-col">
         <TopBar totals={totals} currentDay={currentFrame ? currentFrame.day : 0} />
         <div className="flex flex-1 min-h-0">
-          <NodeDetailsPanel node={selectedNode} onDelete={handleDeleteNode} />
+          <NodeDetailsPanel 
+            nodes={allNodes}
+            node={selectedNode} 
+            onDelete={handleDeleteNode}
+            onNodeClick={setSelectedNode} 
+          />
           <div className="flex-1 relative min-w-0 flex flex-col">
             <div className="flex-1 min-h-0">
               <InteractiveMap
