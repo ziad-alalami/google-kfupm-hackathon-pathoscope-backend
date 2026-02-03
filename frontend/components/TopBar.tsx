@@ -1,7 +1,7 @@
 "use client";
 
-import React, { Activity, useEffect, useState } from "react";
-import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { Activity } from "lucide-react";
 
 // Simple aggregation types for SEIRD totals
 export type SEIRDTotal = {
@@ -60,8 +60,10 @@ const TopBar: React.FC<Props> = ({ totals, currentDay }) => {
       </div>
 
       <div className="flex items-center gap-8">
+        <StatBlock label="SUSCEPTIBLE" value={Math.round(totals.S)} color="text-emerald-500 " />
+        <StatBlock label="EXPOSED" value={Math.round(totals.E)} color="text-yellow-400" />
         <StatBlock label="TOTAL INFECTED" value={Math.round(totals.I)} color="text-rose-500" />
-        <StatBlock label="RECOVERED" value={Math.round(totals.R)} color="text-emerald-500" />
+        <StatBlock label="RECOVERED" value={Math.round(totals.R)} color="text-sky-400" />
         <StatBlock label="DEATHS" value={Math.round(totals.D)} color="text-slate-100" />
       </div>
       
@@ -70,33 +72,3 @@ const TopBar: React.FC<Props> = ({ totals, currentDay }) => {
 };
 
 export default TopBar;
-
-/*
-<div className="flex items-center gap-8 text-xs">
-        <div className="flex flex-col text-[13px] text-slate-300 items-center">
-          <div className="flex items-center gap-4 mt-1">
-            <div className="text-center">
-              <span className="text-emerald-300 mr-1">S</span>
-              <span className="text-emerald-100 font-semibold">{Math.round(totals.S)}</span>
-            </div>
-            <div className="text-center">
-              <span className="text-amber-300 mr-1">E</span>
-              <span className="text-amber-100 font-semibold">{Math.round(totals.E)}</span>
-            </div>
-            <div className="text-center">
-              <span className="text-rose-300 mr-1">I</span>
-              <span className="text-rose-100 font-semibold">{Math.round(totals.I)}</span>
-            </div>
-            <div className="text-center">
-              <span className="text-sky-300 mr-1">R</span>
-              <span className="text-sky-100 font-semibold">{Math.round(totals.R)}</span>
-            </div>
-            <div className="text-center">
-              <span className="text-slate-300 mr-1">D</span>
-              <span className="text-slate-100 font-semibold">{Math.round(totals.D)}</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-*/

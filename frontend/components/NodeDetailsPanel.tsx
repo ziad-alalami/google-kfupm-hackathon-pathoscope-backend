@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import * as Tooltip from '@radix-ui/react-tooltip';
+import { Info } from "lucide-react";
 
 export type UINode = {
   node_id: string;
@@ -21,6 +23,37 @@ interface Props {
   node: UINode | null;
   onDelete?: (node: UINode) => void;
 }
+
+const LabelWithInfo = ({ label, description }: { label: string; description: string }) => (
+  <Tooltip.Provider delayDuration={200}>
+    <Tooltip.Root>
+      <div className="flex items-center gap-1.5">
+        <label className="block text-[11px] text-slate-400 tracking-tight">
+          {label}
+        </label>
+        
+        <Tooltip.Trigger asChild>
+          <button className="cursor-help text-slate-500 hover:text-sky-400 transition-colors outline-none">
+            <Info size={12} {...({ children: null } as any)} />
+          </button>
+        </Tooltip.Trigger>
+
+        {/* This "Portal" is what prevents the clipping! */}
+        <Tooltip.Portal>
+          <Tooltip.Content
+            side="top"
+            align="center"
+            sideOffset={5}
+            className="z-[100] w-52 rounded-md bg-slate-800 p-2.5 text-[12px] leading-relaxed text-slate-200 shadow-xl border border-slate-700 animate-in fade-in zoom-in duration-200"
+          >
+            {description}
+            <Tooltip.Arrow className="fill-slate-800" />
+          </Tooltip.Content>
+        </Tooltip.Portal>
+      </div>
+    </Tooltip.Root>
+  </Tooltip.Provider>
+);
 
 const NodeDetailsPanel: React.FC<Props> = ({ node, onDelete }) => {
   return (
@@ -50,32 +83,35 @@ const NodeDetailsPanel: React.FC<Props> = ({ node, onDelete }) => {
               <p className="text-sm font-semibold">{node.population.toLocaleString()}</p>
             </div>
             <div className="rounded-md bg-slate-800/80 p-2">
-              <p className="text-[11px] text-slate-400">Mobility coeff.</p>
+              <LabelWithInfo 
+                label="Mobility Coefficient" 
+                description="A measure from 0 to 1 of how movement patterns - such as commuting, travel, or general public mobility - drive the transmission rate and spread of a virus. Higher values mean a faster and more widespread transmission of the disease." 
+              />
               <p className="text-sm font-semibold">{node.mobility_coefficient}</p>
             </div>
           </div>
 
           <div className="mt-2">
-            <p className="text-xs font-semibold text-slate-300 mb-1">SEIRD state</p>
+            <p className="text-xs font-semibold text-slate-300 mb-1">SEIRD State</p>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="rounded-md bg-emerald-900/60 p-2">
-                <p className="text-[11px] text-emerald-300">S – Susceptible</p>
+                <p className="text-[11px] text-emerald-300">S — Susceptible</p>
                 <p className="text-sm font-semibold text-emerald-100">{Math.round(node.current_state.S)}</p>
               </div>
               <div className="rounded-md bg-amber-900/60 p-2">
-                <p className="text-[11px] text-amber-300">E – Exposed</p>
+                <p className="text-[11px] text-amber-300">E — Exposed</p>
                 <p className="text-sm font-semibold text-amber-100">{Math.round(node.current_state.E)}</p>
               </div>
               <div className="rounded-md bg-rose-900/60 p-2">
-                <p className="text-[11px] text-rose-300">I – Infectious</p>
+                <p className="text-[11px] text-rose-300">I — Infectious</p>
                 <p className="text-sm font-semibold text-rose-100">{Math.round(node.current_state.I)}</p>
               </div>
               <div className="rounded-md bg-sky-900/60 p-2">
-                <p className="text-[11px] text-sky-300">R – Recovered</p>
+                <p className="text-[11px] text-sky-300">R — Recovered</p>
                 <p className="text-sm font-semibold text-sky-100">{Math.round(node.current_state.R)}</p>
               </div>
-              <div className="rounded-md bg-slate-900/80 p-2 col-span-2">
-                <p className="text-[11px] text-slate-300">D – Deceased</p>
+              <div className="rounded-md bg-slate-800/80 p-2 col-span-2">
+                <p className="text-[11px] text-slate-300">D — Deceased</p>
                 <p className="text-sm font-semibold text-slate-100">{Math.round(node.current_state.D)}</p>
               </div>
             </div>
@@ -87,10 +123,10 @@ const NodeDetailsPanel: React.FC<Props> = ({ node, onDelete }) => {
             </span>
             {onDelete && (
               <button
-                className="text-[11px] px-2 py-1 rounded-md bg-rose-700 hover:bg-rose-600 text-slate-50"
+                className="text-[12px] font-bold px-2 py-1 rounded-md bg-rose-700 hover:bg-rose-600 text-slate-50"
                 onClick={() => onDelete(node)}
               >
-                Delete node
+                Delete Node
               </button>
             )}
           </div>
