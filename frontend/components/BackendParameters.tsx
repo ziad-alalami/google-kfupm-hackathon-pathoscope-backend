@@ -41,6 +41,9 @@ const BackendParameters: React.FC<{ onSimulationComplete?: (results: any[]) => v
   async function handleRun() {
     setLoading(true);
     try {
+      // Artificial delay to make the loading state + dots visible
+      await new Promise((resolve) => setTimeout(resolve, 10000));
+
       const body: any = {
         simulation_horizon_days: horizon,
         disease_parameters: {
@@ -199,9 +202,17 @@ const BackendParameters: React.FC<{ onSimulationComplete?: (results: any[]) => v
         <button
           onClick={handleRun}
           disabled={loading}
-          className="mt-2 w-full rounded-md bg-sky-600 hover:bg-sky-500 disabled:bg-slate-700 text-slate-50 py-2 text-xs font-semibold tracking-wide shadow-md shadow-sky-900/40 transition-colors"
+          className="mt-2 w-full rounded-md bg-sky-600 hover:bg-sky-500 disabled:bg-slate-700 text-slate-50 py-2 text-xs font-semibold tracking-wide shadow-md shadow-sky-900/40 transition-colors flex items-center justify-center"
         >
-          {loading ? "Running..." : "Run Simulation"}
+          {loading ? (
+            <div className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-100 animate-bounce" />
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-100 animate-bounce [animation-delay:0.15s]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-100 animate-bounce [animation-delay:0.3s]" />
+            </div>
+          ) : (
+            "Run Simulation"
+          )}
         </button>
       </div>
     </aside>
