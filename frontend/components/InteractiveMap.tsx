@@ -216,32 +216,32 @@ export default function InteractiveMap({
 
 
   // Fly to selected node when it changes
-  // useEffect(() => {
-  //   // Only fly if the map is loaded and a node is actually selected
-  //   if (!mapRef.current || !selectedNodeId) return;
+  useEffect(() => {
+    // Only fly if the map is loaded and a node is actually selected
+    if (!mapRef.current || !selectedNodeId) return;
 
-  //   const map = mapRef.current;
+    const map = mapRef.current;
 
-  //   // 1. Get the current source data to find the coordinates for this node
-  //   const source = map.getSource("districts") as mapboxgl.GeoJSONSource;
-  //   if (!source) return;
+    // 1. Get the current source data to find the coordinates for this node
+    const source = map.getSource("districts") as mapboxgl.GeoJSONSource;
+    if (!source) return;
 
-  //   const data = (source as any)._data as FeatureCollection<Point>;
-  //   const feature = data.features.find(f => f.properties?.node_id === selectedNodeId);
+    const data = (source as any)._data as FeatureCollection<Point>;
+    const feature = data.features.find(f => f.properties?.node_id === selectedNodeId);
 
-  //   if (feature) {
-  //     const [lon, lat] = feature.geometry.coordinates;
+    if (feature) {
+      const [lon, lat] = feature.geometry.coordinates;
 
-  //     // 2. Trigger the smooth zoom animation
-  //     map.flyTo({
-  //       center: [lon, lat],
-  //       zoom: 11,      // Adjust this zoom level to your preference
-  //       essential: true, // This animation is considered essential with respect to prefers-reduced-motion
-  //       duration: 1500,  // Animation duration in milliseconds
-  //       padding: { right: 320 } // Offset the center so the node isn't hidden behind the right sidebar
-  //     });
-  //   }
-  // }, [selectedNodeId]);
+      // 2. Trigger the smooth zoom animation
+      map.flyTo({
+        center: [lon, lat],
+        zoom: 11,      // Adjust this zoom level to your preference
+        essential: true, // This animation is considered essential with respect to prefers-reduced-motion
+        duration: 1500,  // Animation duration in milliseconds
+        padding: { right: 320 } // Offset the center so the node isn't hidden behind the right sidebar
+      });
+    }
+  }, [selectedNodeId]);
 
   return (
     <div
