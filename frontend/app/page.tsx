@@ -156,6 +156,7 @@ export default function SimulationDashboard() {
                 }}
                 frames={frames}
                 currentDayIndex={currentDayIndex}
+                selectedNodeId={selectedNode?.node_id}
               />
             </div>
             {/* Timeline + play controls – always visible, disabled before first simulation */}
