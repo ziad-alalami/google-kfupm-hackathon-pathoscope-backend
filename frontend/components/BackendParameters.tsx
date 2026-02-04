@@ -183,9 +183,10 @@ const BackendParameters: React.FC<{ onSimulationComplete?: (results: any[]) => v
             />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold text-slate-300">
-              Threat Profile
-            </label>
+            <LabelWithInfo 
+              label="Threat Profile" 
+              description="Predefined disease parameter sets for common pathogens." 
+            />
             <select
               value={threatProfile}
               onChange={(e) => applyThreatProfile(e.target.value as any)}
