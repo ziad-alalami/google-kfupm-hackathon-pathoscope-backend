@@ -1,0 +1,170 @@
+"use client";
+
+import React from "react";
+import * as Tooltip from '@radix-ui/react-tooltip';
+import { Info } from "lucide-react";
+
+export type UINode = {
+  node_id: string;
+  name: string;
+  region: string;
+  mobility_coefficient: number;
+  population: number;
+  current_state: {
+    S: number;
+    E: number;
+    I: number;
+    R: number;
+    D: number;
+  };
+};
+
+interface Props {
+  nodes: UINode[];
+  node: UINode | null;
+  onNodeClick: (node: UINode | null) => void;
+  onDelete?: (node: UINode) => void;
+}
+
+const LabelWithInfo = ({ label, description }: { label: string; description: string }) => (
+  <Tooltip.Provider delayDuration={200}>
+    <Tooltip.Root>
+      <div className="flex items-center gap-1.5">
+        <label className="block text-[11px] text-slate-400 tracking-tight">
+          {label}
+        </label>
+        
+        <Tooltip.Trigger asChild>
+          <button className="cursor-help text-slate-500 hover:text-sky-400 transition-colors outline-none">
+            <Info size={12} {...({ children: null } as any)} />
+          </button>
+        </Tooltip.Trigger>
+
+        {/* This "Portal" is what prevents the clipping! */}
+        <Tooltip.Portal>
+          <Tooltip.Content
+            side="top"
+            align="center"
+            sideOffset={5}
+            className="z-[100] w-52 rounded-md bg-slate-800 p-2.5 text-[12px] leading-relaxed text-slate-200 shadow-xl border border-slate-700 animate-in fade-in zoom-in duration-200"
+          >
+            {description}
+            <Tooltip.Arrow className="fill-slate-800" />
+          </Tooltip.Content>
+        </Tooltip.Portal>
+      </div>
+    </Tooltip.Root>
+  </Tooltip.Provider>
+);
+
+const NodeDetailsPanel: React.FC<Props> = ({ nodes, node, onNodeClick, onDelete }) => {
+  return (
+    <aside className="w-80 shrink-0 border-l border-slate-800 bg-slate-900/80 backdrop-blur-md text-slate-100 flex flex-col shadow-lg">
+      <div className="p-4 border-b border-slate-800">
+        <h2 className="text-lg font-semibold">Node Details</h2>
+        <p className="text-xs text-slate-400 mt-1">
+          Click a node on the map to inspect its SEIRD state.
+        </p>
+      </div>
+
+      
+
+      <div className="p-3 border-b border-slate-800">
+        <p className="text-[12px] font-semibold text-slate-400 mb-2">Quick Select Nodes</p>
+
+        <div className="space-y-1 max-h-25 overflow-y-auto no-scrollbar">
+          {nodes.slice(0, 8).map((n) => (
+            <button
+              key={n.node_id}
+              onClick={() => onNodeClick(n)}
+              className={`w-full text-left px-2 py-1.5 rounded-md text-xs transition
+                ${node?.node_id === n.node_id
+                  ? "bg-sky-600 text-white"
+                  : "bg-slate-800 hover:bg-slate-700 text-slate-200"}`}
+            >
+              {n.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+
+      {node ? (
+        <div className="p-4 space-y-4 overflow-y-auto no-scrollbar">
+          <div>
+            <h3 className="text-base font-semibold">{node.name}</h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Region: {node.region || "N/A"}
+            </p>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Node ID: <span className="font-mono text-[11px]">{node.node_id}</span>
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 text-xs">
+            <div className="rounded-md bg-slate-800/80 p-2">
+              <p className="text-[11px] text-slate-400">Population</p>
+              <p className="text-sm font-semibold">{node.population.toLocaleString()}</p>
+            </div>
+            <div className="rounded-md bg-slate-800/80 p-2">
+              <LabelWithInfo 
+                label="Mobility Coefficient" 
+                description="A measure from 0 to 1 of how movement patterns - such as commuting, travel, or general public mobility - drive the transmission rate and spread of a virus. Higher values mean a faster and more widespread transmission of the disease." 
+              />
+              <p className="text-sm font-semibold">{node.mobility_coefficient}</p>
+            </div>
+          </div>
+
+          <div className="mt-2">
+            <p className="text-xs font-semibold text-slate-300 mb-1">SEIRD State</p>
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="rounded-md bg-emerald-900/60 p-2">
+                <p className="text-[11px] text-emerald-300">S — Susceptible</p>
+                <p className="text-sm font-semibold text-emerald-100">{Math.round(node.current_state.S)}</p>
+              </div>
+              <div className="rounded-md bg-amber-900/60 p-2">
+                <p className="text-[11px] text-amber-300">E — Exposed</p>
+                <p className="text-sm font-semibold text-amber-100">{Math.round(node.current_state.E)}</p>
+              </div>
+              <div className="rounded-md bg-rose-900/60 p-2">
+                <p className="text-[11px] text-rose-300">I — Infectious</p>
+                <p className="text-sm font-semibold text-rose-100">{Math.round(node.current_state.I)}</p>
+              </div>
+              <div className="rounded-md bg-sky-900/60 p-2">
+                <p className="text-[11px] text-sky-300">R — Recovered</p>
+                <p className="text-sm font-semibold text-sky-100">{Math.round(node.current_state.R)}</p>
+              </div>
+              <div className="rounded-md bg-slate-800/80 p-2 col-span-2">
+                <p className="text-[11px] text-slate-300">D — Deceased</p>
+                <p className="text-sm font-semibold text-slate-100">{Math.round(node.current_state.D)}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-2 border-t border-slate-800 mt-2 flex justify-between items-center">
+            <span className="text-[11px] text-slate-500">
+              Deleting a node removes it from the simulation graph.
+            </span>
+            {onDelete && (
+              <button
+                className="text-[12px] font-bold px-2 py-1 rounded-md bg-rose-700 hover:bg-rose-600 text-slate-50"
+                onClick={() => onDelete(node)}
+              >
+                Delete Node
+              </button>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="flex-1 flex items-center justify-center px-6 text-center">
+          <p className="text-sm text-slate-500">
+            No node selected yet. Hover over or click a circle on the map to see its
+            full SEIRD breakdown and metadata here.
+          </p>
+        </div>
+      )}
+    </aside>
+  );
+};
+
+export default NodeDetailsPanel;

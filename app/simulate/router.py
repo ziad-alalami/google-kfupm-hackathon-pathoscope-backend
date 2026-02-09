@@ -1,12 +1,12 @@
 from fastapi import APIRouter
-from app.simulate.service import SimulationService
+from app.simulate.service import simulation_service
 from app.simulate.dtos import SimulateRequest, SimulationResult
 from app.simulate.dtos_mapper import map_simulation_results
 
 from typing import List
 
 router = APIRouter(prefix="/simulate", tags=["Simulation"])
-service = SimulationService()
+service = simulation_service
 
 
 @router.post("/", response_model=List[SimulationResult])
